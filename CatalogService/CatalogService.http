@@ -1,0 +1,17 @@
+@CatalogService_HostAddress = https://localhost:7267
+
+GET https://localhost:7267/api/products
+Accept: application/json
+
+### CatalogService_HostAddresshttps://localhost:7267
+###
+
+GET https://localhost:7267/api/products/{id}
+
+###
+DELETE https://localhost:7267/api/products/{id}
+
+POST https://localhost:7267/api/products
+
+PUT https://localhost:7267/api/products/{id}/stock
+

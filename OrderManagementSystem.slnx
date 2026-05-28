@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="CatalogService/CatalogService.csproj" />
+  <Project Path="NotificationService/NotificationService.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+  <Project Path="OrderService/OrderService.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
+</Solution>
