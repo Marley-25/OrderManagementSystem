@@ -47,6 +47,7 @@ namespace CatalogService.Services.Impl
 
         public async Task<ProductDto?> UpdateProductAsync(Guid id, ProductDto dto)
         {
+            //to do check if quantity is not negative
             var result = await _productRepository.UpdateAsync(id, dto);
             return result;
         }
