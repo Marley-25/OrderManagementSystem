@@ -10,7 +10,7 @@ using CatalogService.Services;
 using CatalogService.Dtos;
 using Microsoft.Extensions.Validation;
 using CatalogService.Services.Impl;
-using CatalogService.Repositories;
+
 
 ///Guid_id problem + async method problem ù
 
