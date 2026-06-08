@@ -11,7 +11,7 @@ using System.Linq;
 namespace OrderService.Controllers
 {
     [ApiController]
-    [Route("api/orders[controller]")]
+    [Route("api/order")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;

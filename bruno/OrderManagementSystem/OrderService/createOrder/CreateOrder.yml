@@ -5,25 +5,25 @@ info:
 
 http:
   method: POST
-  url: http://localhost:5059/api/orders/orders
+  url: http://localhost:5059/api/order/orders
   body:
     type: json
     data: |-
       {
-        "products": 
-        {
-          "productId": "1fc2b274-e10e-4d25-84db-d37b0b70c907",
-          "productName": "Phon",
-          "price": 67.60  ,
-          "quantity": 3
-        },
-        {
-        "productId": "daf5fad5-f99c-4645-af10-3ee7f3770ca7",
-        "productName": "Phon",
-          "price": 67.60  ,
-          "quantity": 1
-        }
-      ]
+        "products": [
+          {
+            "productId": "ef0214f1-499a-4c6f-bb3c-ba4277dc1836",
+            "productName": "Phon",
+            "price": 67.60,
+            "quantity": 3
+          },
+          {
+            "productId": "ef0214f1-499a-4c6f-bb3c-ba4277dc1836",
+            "productName": "Phon",
+            "price": 67.60,
+            "quantity": 1
+          }
+        ]
       }
   auth: inherit
 
