@@ -1,0 +1,23 @@
+info:
+  name: CreateProducta
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:5171/api/catalog/products
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Phon",
+        "price": 67.60,
+        "availableQuantity": 21
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

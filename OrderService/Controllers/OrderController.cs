@@ -42,18 +42,14 @@ namespace OrderService.Controllers
 
         //POST /api/orders:
         [HttpPost] 
-        public async Task<OrderDto> CreateOrderAsync([FromBody] Order dto)
+        public async Task<ActionResult<OrderDto>> CreateOrderAsync([FromBody] OrderDto dto)
+        
         {
-            if (dto == null || dto.Products == null || !dto.Products.Any())
-
-            {
-                return BadRequest(new{"Order must have 1 product"});
-            }
-
-            var newOrder = await _orderService.CreateOrderAsync(dto);
-
-            return CreatedAtAction(nameof(GetOrdersAsync), new { id = newOrder.Id }, newOrder);
+            if (!ModelState.IsValid) //attriubuti di validazione con ModelValid 
+                return BadRequest(ModelState);
+            var createdOrder = await _orderService.CreateOrderAsync(dto);
+            return createdOrder;
+           
         }
-
-    }
+}
 }

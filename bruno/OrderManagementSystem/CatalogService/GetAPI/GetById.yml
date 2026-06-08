@@ -1,0 +1,19 @@
+info:
+  name: GetById
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: http://localhost:5171/api/catalog/products/:id
+  params:
+    - name: id
+      value: f330d8af-125e-47ff-95b1-68aeda3e32a1
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

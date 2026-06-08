@@ -1,0 +1,27 @@
+info:
+  name: updateProduct
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: http://localhost:5171/api/catalog/products/:id
+  params:
+    - name: id
+      value: f330d8af-125e-47ff-95b1-68aeda3e32a1
+      type: path
+  body:
+    type: json
+    data: |
+      {
+        "name": "Oven",
+        "price": 540.60,
+        "availableQuantity": 32
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
