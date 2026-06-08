@@ -1,41 +1,59 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
+using OrderService.Dtos;
+using OrderService.Services;
+using OrderService.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+
 
 namespace OrderService.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //public class OrdersController : ControllerBase
-    //{
-    //    //POST /api/orders:
-    //    [HttpPost]
-    //    public int Post([FromBody]) Order order)
-    //    {
-    //        var request = JsonConfigurationExtensions.Convert.SerializeObject(order);
-    //        //i need to create order 
-    //        var orderClient = IHttpClientFactory.CreateClient("Order");
-    //        var orderResponse = await OrderClient.PostAsync("/api/order", new StringContent(request, Encoding.UTF8, "application/JSON"));
-    //        var orderId = await orderResponse.Content.ReadAsStringAsync();
+    [ApiController]
+    [Route("api/orders[controller]")]
+    public class OrderController : ControllerBase
+    {
+        private readonly IOrderService _orderService;
 
-    //        //update catalog 
-    //        var catalogClient = httpClientFactory.createClient("Catalog");
-    //        var await catalogClient.PostAsync("/api/catalog", new StringContent(request, Encoding.UTF8, "application.JSON"));
-    //        var catalogId = await order.Response.Content.ReadAsStringAsync();
+        public OrderController(IOrderService orderService)        
+        {
+            _orderService = orderService;
+        }
 
-    //        //send notification 
-    //        var notificationClient = httpClientFactory.createClient("Notification");
-    //        var notificationResponse = await notificationClient.PostAsync("/api/notification", NewsStyleUriParser StringContent(request, Encoding.UTF8, "application/JSON"));
-    //        var notificationId = await notificationResponse.Content.ReadAsStringAsync();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersAsync()
+        {
+            var orders = await _orderService.GetOrdersAsync();
+            return Ok(orders);
+        }
 
-    //        Console.WriteLine($"Order: {orderId), Catalog: {catalogId}, Notification: {notificationId}");
-    //        return new OrderResponse { OrderId = orderId };
-
-
-    //        /*Console.Writeline($"Created new order: {order.ProductName}");
-    //        return 1;*/
-    //    }
+        [HttpGet("orders/{id}")] //GET /api/orders/{id}:
+        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(Guid id)
+        {
+            var order = await _orderService.GetOrderByIdAsync(id);
+            if (order == null)
+            {
+                return NotFound(new { message = "Order not found" });
+            }
+            return Ok(order);
+        }
 
 
-    //}
+        //POST /api/orders:
+        [HttpPost] 
+        public async Task<OrderDto> CreateOrderAsync([FromBody] Order dto)
+        {
+            if (dto == null || dto.Products == null || !dto.Products.Any())
+
+            {
+                return BadRequest(new{"Order must have 1 product"});
+            }
+
+            var newOrder = await _orderService.CreateOrderAsync(dto);
+
+            return CreatedAtAction(nameof(GetOrdersAsync), new { id = newOrder.Id }, newOrder);
+        }
+
+    }
 }
