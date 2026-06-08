@@ -21,7 +21,7 @@ namespace OrderService.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet]
+        [HttpGet("orders")]
         public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersAsync()
         {
             var orders = await _orderService.GetOrdersAsync();
@@ -41,7 +41,7 @@ namespace OrderService.Controllers
 
 
         //POST /api/orders:
-        [HttpPost] 
+        [HttpPost("orders")] 
         public async Task<ActionResult<OrderDto>> CreateOrderAsync([FromBody] OrderDto dto)
         
         {

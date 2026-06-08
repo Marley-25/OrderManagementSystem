@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using OrderService.Repositories;
 using OrderService.Repositories.Impl;
 using OrderService.Services;
+using OrderService.Services.Impl;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<OrderDb>(options => options.UseInMemoryDatabase("O
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IOrderService, OrderService.Services.Impl.OrderService>();
+builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
 builder.WebHost.UseUrls("http://localhost:5059");
 
 builder.Services.AddControllers();

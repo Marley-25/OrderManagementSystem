@@ -8,11 +8,11 @@ using OrderService.Services;
 
 namespace OrderService.Services.Impl
 {
-    public class OrderService : IOrderService
+    public class OrderServiceImpl : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderServiceImpl(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
@@ -40,7 +40,7 @@ namespace OrderService.Services.Impl
         public async Task<OrderDto?> GetOrderByIdAsync(Guid id)
         {
             var order = await _orderRepository.GetOrderByIdAsync(id);
-            if (order == null
+            if (order == null)
                 {
                 return null;
             }
