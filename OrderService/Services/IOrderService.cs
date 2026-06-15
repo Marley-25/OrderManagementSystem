@@ -7,8 +7,8 @@ namespace OrderService.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<OrderDto>> GetOrdersAsync();
-        Task<OrderDto?> GetOrderByIdAsync(Guid id);
-        Task<OrderDto> CreateOrderAsync(OrderDto dto);
+        Task<IEnumerable<OrderResponseDto>> GetOrdersAsync();
+        Task<OrderResponseDto?> GetOrderByIdAsync(Guid id);
+        Task<OrderResponseDto> CreateOrderAsync(OrderProductDto dto);
     }
 }

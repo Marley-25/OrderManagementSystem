@@ -16,20 +16,20 @@ namespace OrderService.Controllers
     {
         private readonly IOrderService _orderService;
 
-        public OrderController(IOrderService orderService)        
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
         }
 
         [HttpGet("orders")]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersAsync()
+        public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetOrdersAsync()
         {
             var orders = await _orderService.GetOrdersAsync();
             return Ok(orders);
         }
 
         [HttpGet("orders/{id}")] //GET /api/orders/{id}:
-        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(Guid id)
+        public async Task<ActionResult<OrderResponseDto>> GetOrderByIdAsync(Guid id)
         {
             var order = await _orderService.GetOrderByIdAsync(id);
             if (order == null)
@@ -41,15 +41,32 @@ namespace OrderService.Controllers
 
 
         //POST /api/orders:
-        [HttpPost("orders")] 
-        public async Task<ActionResult<OrderDto>> CreateOrderAsync([FromBody] OrderDto dto)
-        
+        [HttpPost("orders")]
+        public async Task<ActionResult<OrderResponseDto>> CreateOrderAsync([FromBody] OrderProductDto dto)
+
         {
-            if (!ModelState.IsValid) //attriubuti di validazione con ModelValid 
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
-            var createdOrder = await _orderService.CreateOrderAsync(dto);
-            return createdOrder;
-           
+            }//attriubuti di validazione con ModelValid 
+            try
+            {
+                var createdOrder = await _orderService.CreateOrderAsync(dto);
+                return CreatedAtAction(nameof(GetOrderByIdAsync), new { id = createdOrder.Id }, createdOrder);
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message  });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message  });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
-}
+    }
 }

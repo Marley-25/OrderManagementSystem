@@ -22,7 +22,7 @@ namespace OrderService.Repositories.Impl
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
             return await _context.Orders
-                .Include(o => o.Products)
+                //.Include(o => o.Products)
                 .ToListAsync();
         }
 
@@ -30,14 +30,14 @@ namespace OrderService.Repositories.Impl
         public async Task<Order?> GetOrderByIdAsync(Guid id)
         {
             return await _context.Orders
-                .Include(o => o.Products)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                //.Include(o => o.Products)
+                .FindAsync(id);
 
         }
         public async Task CreateOrderAsync(Order order)
         {
            
-            await _context.Orders.AddAsync(order); ///Order newOrderEntity) froom IOrderRepository
+           await _context.Orders.AddAsync(order); ///Order newOrderEntity) froom IOrderRepository
         }
         public async Task SaveChangesAsync()
         {

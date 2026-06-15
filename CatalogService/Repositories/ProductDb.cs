@@ -8,11 +8,12 @@ namespace CatalogService.Repositories;
 public class ProductDb : DbContext
 
 {
-    public DbSet<ProductDto> Products { get; set; }
     public ProductDb(DbContextOptions<ProductDb> options) : base(options)
     {
     }
+    public DbSet<ProductDto> Products { get; set; }
 
+}
     public class Product
     {
         public Guid? Id { get; set; } = Guid.NewGuid(); //autogenerato 
@@ -23,4 +24,3 @@ public class ProductDb : DbContext
         public required int AvailableQuantity { get; set; }
 
     }
-}

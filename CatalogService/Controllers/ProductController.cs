@@ -43,7 +43,7 @@ namespace CatalogService.Controllers
             {
                 return NotFound(new { message = "Product not found" });
             }
-               
+
             return Ok(product);
         }
 
@@ -55,18 +55,18 @@ namespace CatalogService.Controllers
                 return BadRequest(ModelState);
             var createdProduct = await _productService.CreateProductAsync(dto);
             return createdProduct;
-           
+
         }
 
         //update per il prodotto 
         [HttpPut("products/{id}")] //PUT /api/products/{id} only available quantity 
-        public async Task<ActionResult<ProductDto>> UpdateProductAsync(Guid id, [FromBody]  ProductDto dto)
+        public async Task<ActionResult<ProductDto>> UpdateProductAsync(Guid id, [FromBody] ProductDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-               
+
 ;
             var updated = await _productService.UpdateProductAsync(id, dto);
             if (updated == null)
@@ -79,18 +79,49 @@ namespace CatalogService.Controllers
 
         [HttpDelete("products/{id}")] //DELETE /api/products/{id}
         public async Task<ActionResult<bool>> DeleteProductAsync(Guid id)
-       
+
         {
             bool isDeleted = await _productService.DeleteProductAsync(id);
 
             ///var deleted = await _productService.DeleteProductAsync(Id);
             if (!isDeleted)
             {
-                return NotFound(new {message = $"Product not found"});
+                return NotFound(new { message = $"Product not found" });
             }
-            return Ok(new {message = "Product deleted successfully"});
+            return Ok(new { message = "Product deleted successfully" });
 
         }
 
+
+        ////i need a api for Update stock
+        [HttpPut("products/{id}/stock")] //PUT /api/catalog/update-stock/{id}
+        public async Task<IActionResult>UpdateStock(Guid id, [FromBody] UpdateStockDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (dto.Quantity <= 0)
+            {
+                return BadRequest(new { message = "Quantity must be greater than 0" });
+            }
+
+            try
+            {
+                var result = await _productService.ReduceStockAsync(id, dto.Quantity);
+
+                if (!result)
+                {
+                    return BadRequest(new { message = "Not enough stock available" });
+                }
+                return Ok(new { message = "Stock updated successfully" });
+            }
+
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Product not found" });
+            }
+        }
     }
 }
+

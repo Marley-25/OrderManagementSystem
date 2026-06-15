@@ -17,7 +17,7 @@ namespace CatalogService.Dtos
     
     public class UpdateStockDto   //in order too??'
     {
-        public int AvailableQuantity { get; set; }
+        public required int Quantity { get; set; }
     }
 }
    
