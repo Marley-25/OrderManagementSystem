@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using NotificationService.Dtos;
 using NotificationService.Repositories;
-using NotificationService.Repositories.Impl;
 using NotificationService.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace NotificationService.Services.Impl
 {
@@ -19,28 +14,26 @@ namespace NotificationService.Services.Impl
         {
             _notificationRepository = notificationRepository;
         }
+
         public async Task<NotificationDto> CreateNotificationAsync(NotificationDto notificationDto)
         {
             if (notificationDto == null)
             {
                 throw new ArgumentNullException(nameof(notificationDto));
             }
+
             var notification = new NotificationDto
             {
-                OrderId = Guid.NewGuid(),
-                //Email = notificationDto.Email,
+                OrderId = notificationDto.OrderId,
+                ProductId = notificationDto.ProductId,
                 Message = notificationDto.Message,
                 CreatedAt = DateTime.UtcNow
             };
+
             await _notificationRepository.CreateNotificationAsync(notification);
+            await _notificationRepository.SaveChangesAsync();
 
             return notification;
-        }
-
-        public async Task SendNotificationAsync(NotificationDto dto)
-        {
-            var body = $"Hi {dto.Message}";   //text content of the email 
-            await _notificationRepository.SendAsync(dto.Message, "Notification", body);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace NotificationService.Services
     {
         Task<NotificationDto> CreateNotificationAsync(NotificationDto dto);
        
-        Task SendNotificationAsync(NotificationDto dto);
+        //Task SendNotificationAsync(NotificationDto dto);
     }
 }

@@ -18,13 +18,13 @@ namespace NotificationService.Controllers
         }
 
         [HttpPost] 
-        public async Task<ActionResult> SendNotification([FromQuery] NotificationDto dto)
+        public async Task<ActionResult> CreateNotification([FromQuery] NotificationDto dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            await _notificationService.SendNotificationAsync(dto);
+            await _notificationService.CreateNotificationAsync(dto);
             return Ok(new { message = "Notification sent successfully" });
         }
     }

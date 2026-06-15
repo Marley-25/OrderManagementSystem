@@ -14,13 +14,3 @@ public class ProductDb : DbContext
     public DbSet<ProductDto> Products { get; set; }
 
 }
-    public class Product
-    {
-        public Guid? Id { get; set; } = Guid.NewGuid(); //autogenerato 
-
-        public required string Name { get; set; } = string.Empty;
-
-        public required decimal Price { get; set; }
-        public required int AvailableQuantity { get; set; }
-
-    }

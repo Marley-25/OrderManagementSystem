@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Validation;
 using Microsoft.Extensions.Http;
-using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,12 +21,6 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.WebHost.UseUrls("http://localhost:5171");
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-//new for mapper 
-builder.Services.AddAutoMapper(cfg =>
-{
-    cfg.AddProfile<MappingProfile>();
-});
 
     builder.Services.AddHttpClient("CatalogClient", client =>
 {
