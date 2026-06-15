@@ -17,16 +17,9 @@ namespace NotificationService.Repositories.Impl
         public async Task CreateNotificationAsync(NotificationDto notification)
         {
             await _context.Notifications.AddAsync(notification);
-        }
-
-        public async Task SaveChangesAsync()
-        {
             await _context.SaveChangesAsync();
+            Console.WriteLine($"Notification Order {notification.OrderId}: {notification.Message}");
         }
-
-        public async Task AddAsync(NotificationDto entity)
-        {
-            await _context.AddAsync(entity);
-        }
+        
     }
 }

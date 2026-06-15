@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Linq.Expressions;
 
 
 namespace OrderService.Controllers
@@ -42,7 +43,7 @@ namespace OrderService.Controllers
 
         //POST /api/orders:
         [HttpPost("orders")]
-        public async Task<ActionResult<OrderResponseDto>> CreateOrderAsync([FromBody] OrderProductDto dto)
+        public async Task<ActionResult<OrderResponseDto>> CreateOrderAsync([FromBody] IEnumerable<OrderProductDto> dtos)
 
         {
             if (!ModelState.IsValid)
@@ -51,22 +52,18 @@ namespace OrderService.Controllers
             }//attriubuti di validazione con ModelValid 
             try
             {
-                var createdOrder = await _orderService.CreateOrderAsync(dto);
-                return CreatedAtAction(nameof(GetOrderByIdAsync), new { id = createdOrder.Id }, createdOrder);
+                var createdOrders = new List<OrderResponseDto>();
+                foreach (var dto in dtos)
+                {
+                    var createdOrder = await _orderService.CreateOrderAsync(dto);
+                    createdOrders.Add(createdOrder);
+                }
+                return Ok(createdOrders);
+            }
 
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message  });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message  });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
+            catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+            catch (InvalidOperationException ex) { return BadRequest(new {message = ex.Message}); }
         }
     }
 }

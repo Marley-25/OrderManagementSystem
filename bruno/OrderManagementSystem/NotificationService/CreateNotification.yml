@@ -1,0 +1,25 @@
+info:
+  name: CreateNotification
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:5090/api/notifications
+  body:
+    type: json
+    data: |-
+      {
+        "id": " ",
+        "productId": " ",
+        "orderId": " ",
+        "createdAt": " ",
+        "message": "Order sent successfully!"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

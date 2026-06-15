@@ -18,7 +18,7 @@ namespace NotificationService.Controllers
         }
 
         [HttpPost] 
-        public async Task<ActionResult> CreateNotification([FromQuery] NotificationDto dto)
+        public async Task<ActionResult> CreateNotificationAsync([FromBody] NotificationDto dto)
         {
             if (!ModelState.IsValid)
             {

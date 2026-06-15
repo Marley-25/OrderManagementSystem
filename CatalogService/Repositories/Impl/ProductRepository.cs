@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using CatalogService.Repositories;
 using System.Runtime.Serialization;
+using CatalogService.Services;
+using CatalogService.Services.Impl;
 
 namespace CatalogService.Repositories.Impl
 {
@@ -14,10 +16,13 @@ namespace CatalogService.Repositories.Impl
         {
             _context = context;
         }
-
-        public async Task<ProductDto> CreateAsync(ProductDto dto)
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
         {
-            var result = await _context.Products.AddAsync(dto);
+            return await _context.Products.ToListAsync();
+        }
+        public async Task<ProductDto> CreateAsync(ProductDto product)
+        {
+            var result = await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return result.Entity;
         }
@@ -31,12 +36,6 @@ namespace CatalogService.Repositories.Impl
                 await _context.SaveChangesAsync();
             }
         }
-
-        public async Task<IEnumerable<ProductDto>> GetAllAsync()
-        {
-            return await _context.Products.ToListAsync();
-        }
-
 
         public async Task<ProductDto?> GetByIdAsync(Guid id)
         {
@@ -77,11 +76,6 @@ namespace CatalogService.Repositories.Impl
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
-        }
-
-        public void SaveChanges() //sync method useful for some cases but generally async is preferred for database operations to avoid blocking threads!!!
-        {
-            _context.SaveChanges();
         }
     }
 }

@@ -11,8 +11,9 @@ namespace CatalogService.Repositories
         Task DeleteAsync(Guid id);
         Task<ProductDto?> UpdateAsync(ProductDto product);
         Task SaveChangesAsync();
-        void SaveChanges(); //isd useful??
-        Task<bool> ReduceStockAsync(Guid productId, int quantity);
+        
+        //void SaveChanges(); //isd useful??
+        //Task<bool> ReduceStockAsync(Guid productId, int quantity);
     }
 
 }

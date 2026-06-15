@@ -9,7 +9,8 @@ using OrderService.Dtos;
 using OrderService.Repositories;
 using OrderService.Services;
 using Microsoft.Extensions.Http;
-using CatalogService; 
+using CatalogService;
+using System.Reflection.Metadata.Ecma335;
 
 
 
@@ -19,14 +20,13 @@ namespace OrderService.Services.Impl
     {
         private readonly IOrderRepository _orderRepository;
         private readonly HttpClient _catalogClient;
-        //private readonly HttpClient _notificationClient;
+        private readonly HttpClient _notificationClient;
 
         public OrderServiceImpl(IOrderRepository orderRepository, IHttpClientFactory httpClientFactory) //ctor with Interface http?
         {
             _orderRepository = orderRepository;
             _catalogClient = httpClientFactory.CreateClient("CatalogClient");   //dependency injection to request at catalog 
-            //creational design patternb, create obj without exposing the logic to client, encapsulation 
-               //notification
+           _notificationClient = httpClientFactory.CreateClient("NotificationService");
         }
 
         public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()  ///orderDto or orderproduct from ICollection 
@@ -54,15 +54,10 @@ namespace OrderService.Services.Impl
                 return null;
             }
             return new OrderResponseDto
-            //{
-            //    OrderId = order.Id,
-            //    TotalPrice = order.TotalPrice,
-            //    Products = order.Products.Select(p => new OrderProductDto
+            
             {
                 Id = order.Id,
                 ProductId = order.ProductId,
-                //ProductName = p.ProductName,
-                //Price = p.Price,
                 Quantity = order.Quantity,
                 TotalPrice = order.TotalPrice,
                 CreatedAt = order.CreatedAt
@@ -78,7 +73,7 @@ namespace OrderService.Services.Impl
                throw new ArgumentException("Quantity must be >0");
             }
             //call to GET api/products for price 
-            var productResponse = await _catalogClient.GetAsync($"/api/products{dto.ProductId}");
+            var productResponse = await _catalogClient.GetAsync($"/api/products/{dto.ProductId}");
             if  (!productResponse.IsSuccessStatusCode)
             {
                 throw new KeyNotFoundException("Product not found");
@@ -101,7 +96,6 @@ namespace OrderService.Services.Impl
 
             var TotalPrice = product.Price * dto.Quantity;
             
-            var orderId = Guid.NewGuid();
             var newOrder = new Order
             {
                 Id = Guid.NewGuid(),
@@ -111,24 +105,27 @@ namespace OrderService.Services.Impl
                 CreatedAt = DateTime.UtcNow
             };
 
-           ///?? newOrder.UpdateTotalPrice();
-
             await _orderRepository.CreateOrderAsync(newOrder);
             await _orderRepository.SaveChangesAsync();
 
-            await _orderRepository.SaveChangesAsync();
-
-            var response = new OrderResponseDto
+            var notificationOrder = new
             {
-                Id = newOrder.Id,
-                CreatedAt = newOrder.CreatedAt
+                orderId = newOrder.Id,
+                productId = newOrder.ProductId,
+                message = $"Order processed for {product.Name}",
+                createdAt = DateTime.UtcNow
             };
 
-            return response;
-
-            ////dto.OrderId = newOrder.Id;
-            ////dto.TotalPrice = newOrder.TotalPrice;
-            //return dto;
+            _ = _notificationClient.PostAsJsonAsync("/api/notifications", notificationOrder);
+  
+            return new OrderResponseDto
+            {
+                Id = newOrder.Id,
+                ProductId = newOrder.ProductId,
+                Quantity = newOrder.Quantity,
+                TotalPrice = newOrder.TotalPrice,
+                CreatedAt = newOrder.CreatedAt
+            };
         }
     }
 }

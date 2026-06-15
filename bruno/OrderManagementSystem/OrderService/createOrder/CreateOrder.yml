@@ -9,21 +9,16 @@ http:
   body:
     type: json
     data: |-
-      {
-        "products": [
-          {
-            "productId": "ef0214f1-499a-4c6f-bb3c-ba4277dc1836",
-            "productName": "Phon",
-            "price": 67.60,
-            "quantity": 3
-          },
-          {
-            "productId": "ef0214f1-499a-4c6f-bb3c-ba4277dc1836",
-            "productName": "Phon",
-            "price": 67.60,
-            "quantity": 1
-          }
-        ]
+      { dtos:[
+        {
+        "productId": "3d039a20-efd2-442c-a893-d97d6343fd42",
+        "quantity": 12
+      },
+        {
+        "productId": "a2c4d059-8016-45c7-8409-baf93a7e8af4",
+        "quantity": 4
+      }
+      ]
       }
   auth: inherit
 

@@ -15,25 +15,24 @@ namespace NotificationService.Services.Impl
             _notificationRepository = notificationRepository;
         }
 
-        public async Task<NotificationDto> CreateNotificationAsync(NotificationDto notificationDto)
+        public async Task<NotificationDto> CreateNotificationAsync(NotificationDto dto)
         {
-            if (notificationDto == null)
-            {
-                throw new ArgumentNullException(nameof(notificationDto));
-            }
+            //if (notificationDto == null)
+            //{
+            //    throw new ArgumentNullException(nameof(notificationDto));
+            //}
 
-            var notification = new NotificationDto
-            {
-                OrderId = notificationDto.OrderId,
-                ProductId = notificationDto.ProductId,
-                Message = notificationDto.Message,
-                CreatedAt = DateTime.UtcNow
-            };
+            //var notification = new NotificationDto
+            //{
+            //    OrderId = notificationDto.OrderId,
+            //    ProductId = notificationDto.ProductId,
+            //    Message = notificationDto.Message,
+            //    CreatedAt = DateTime.UtcNow
+            //};
 
-            await _notificationRepository.CreateNotificationAsync(notification);
-            await _notificationRepository.SaveChangesAsync();
+            await _notificationRepository.CreateNotificationAsync(dto);
 
-            return notification;
+            return dto;
         }
     }
 }

@@ -95,7 +95,7 @@ namespace CatalogService.Controllers
 
         ////i need a api for Update stock
         [HttpPut("products/{id}/stock")] //PUT /api/catalog/update-stock/{id}
-        public async Task<IActionResult>UpdateStock(Guid id, [FromBody] UpdateStockDto dto)
+        public async Task<IActionResult> UpdateStock(Guid id, [FromBody] UpdateStockDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -106,21 +106,29 @@ namespace CatalogService.Controllers
                 return BadRequest(new { message = "Quantity must be greater than 0" });
             }
 
-            try
-            {
-                var result = await _productService.ReduceStockAsync(id, dto.Quantity);
+            //try
+            //{
+            //    var result = await _productService.ReduceStockAsync(id, dto.Quantity);
 
-                if (!result)
-                {
-                    return BadRequest(new { message = "Not enough stock available" });
-                }
-                return Ok(new { message = "Stock updated successfully" });
-            }
+            //    if (!result)
+            //    {
+            //        return BadRequest(new { message = "Not enough stock available" });
+            //    }
+            //    return Ok(new { message = "Stock updated successfully" });
+            //}
 
-            catch (KeyNotFoundException)
+            //catch (KeyNotFoundException)
+            //{
+            //    return NotFound(new { message = "Product not found" });
+            //}
+
+            var result = await _productService.ReduceStockAsync(id, dto.Quantity);
+            if (!result)
             {
-                return NotFound(new { message = "Product not found" });
+                return BadRequest(new { message = "Not enough stock available" });
             }
+            return Ok(new { message = "Stock updated successfully" });
+       
         }
     }
 }
