@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace OrderService.Repositories;
-///ProductDbContext class is useful as it represents your database context for managing Product entities with Entity Framework Core.
+
     public class OrderDb : DbContext
 
     {

@@ -4,7 +4,6 @@ using System;
 
 
 namespace CatalogService.Repositories;
-///ProductDbContext class is useful as it represents your database context for managing Product entities with Entity Framework Core.
 public class ProductDb : DbContext
 
 {

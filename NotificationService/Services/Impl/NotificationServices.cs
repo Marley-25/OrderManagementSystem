@@ -17,18 +17,6 @@ namespace NotificationService.Services.Impl
 
         public async Task<NotificationDto> CreateNotificationAsync(NotificationDto dto)
         {
-            //if (notificationDto == null)
-            //{
-            //    throw new ArgumentNullException(nameof(notificationDto));
-            //}
-
-            //var notification = new NotificationDto
-            //{
-            //    OrderId = notificationDto.OrderId,
-            //    ProductId = notificationDto.ProductId,
-            //    Message = notificationDto.Message,
-            //    CreatedAt = DateTime.UtcNow
-            //};
 
             await _notificationRepository.CreateNotificationAsync(dto);
 

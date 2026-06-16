@@ -49,11 +49,11 @@ namespace OrderService.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }//attriubuti di validazione con ModelValid 
+            }
             try
             {
                
-                var createdOrders = await _orderService.CreateOrderAsync(dtos); //no foreach 
+                var createdOrders = await _orderService.CreateOrderAsync(dtos);
                 return Ok(createdOrders);
             }
 

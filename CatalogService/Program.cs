@@ -28,11 +28,9 @@ builder.Services.AddEndpointsApiExplorer();
 });
 
 
-//builder.Services.AddValidation(); 
-
 var  app = builder.Build();
 
-app.UseDeveloperExceptionPage();  //here the code stop 
+app.UseDeveloperExceptionPage();
 
 app.MapGet("/", () => "API run");
 

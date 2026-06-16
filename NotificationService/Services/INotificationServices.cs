@@ -8,7 +8,6 @@ namespace NotificationService.Services
     public interface INotificationService
     {
         Task<NotificationDto> CreateNotificationAsync(NotificationDto dto);
-       
-        //Task SendNotificationAsync(NotificationDto dto);
+
     }
 }

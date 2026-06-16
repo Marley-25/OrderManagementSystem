@@ -7,10 +7,9 @@ using System.Diagnostics.Eventing.Reader;
 
 namespace CatalogService.Services.Impl
 {
-    public class ProductService : IProductService //classe base 
-    {
-        //aggiungi injection IProductRepository 
-        private readonly IProductRepository _productRepository; //rig 20-25 dependency injection
+    public class ProductService : IProductService 
+    { 
+        private readonly IProductRepository _productRepository;
 
         public ProductService(IProductRepository productRepository)
         {
@@ -48,7 +47,6 @@ namespace CatalogService.Services.Impl
 
         public async Task<ProductDto?> UpdateProductAsync(Guid id, ProductDto dto)
         {
-            //new 
             if (dto.AvailableQuantity < 0)
             {
                 throw new ArgumentException("Available quantity cannot be negative");
@@ -73,9 +71,6 @@ namespace CatalogService.Services.Impl
                 Price = existing.Price,
                 AvailableQuantity = existing.AvailableQuantity
             };
-            //to do check if quantity is not negative
-            //var result = await _productRepository.UpdateAsync(id, dto);
-            //return result;
         }
        public async Task<bool> ReduceStockAsync(Guid productId, int quantity)
         {

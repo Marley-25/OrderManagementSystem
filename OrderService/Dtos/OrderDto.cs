@@ -8,19 +8,16 @@ using Microsoft.OpenApi.MicrosoftExtensions;
 namespace OrderService.Dtos
 {
 
-    public class OrderProductDto //useful for POST orders 
+    public class OrderProductDto 
     {
         public required Guid ProductId { get; set; }
-        /// public required string ProductName { get; set; }
-        ///public required decimal Price { get; set; }
 
-        //dpoubts 
         [Required] 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity > 0")]
-        public required int Quantity { get; set; }   ///[Range] ever above the properties 
+        public required int Quantity { get; set; } 
        
     }
-        public class OrderResponseDto //response from GET 
+        public class OrderResponseDto 
         {
             public Guid Id { get; set; }
             public Guid ProductId { get; set; }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks; // allow multiple parts of code to run concurrently,
+using System.Threading.Tasks;
 using CatalogService.Repositories;
 using CatalogService.Services;
 using CatalogService.Dtos;
@@ -12,15 +12,13 @@ using Microsoft.Extensions.Validation;
 using CatalogService.Services.Impl;
 
 
-///Guid_id problem + async method problem ù
-
 namespace CatalogService.Controllers
 {
     [ApiController]
-    [Route("api/catalog")] //url di base BRuno 
+    [Route("api/catalog")] 
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _productService; //rig 20-25 dependency injection
+        private readonly IProductService _productService;
 
         public ProductController(IProductService productService)
         {
@@ -36,7 +34,6 @@ namespace CatalogService.Controllers
 
         [HttpGet("products/{id}")] //GET /api/products/{id}
         public async Task<ActionResult<ProductDto?>> GetById(Guid id)
-        ///public async Task<IActionResult> GetProducts(Guid_id)
         {
             var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
@@ -58,8 +55,7 @@ namespace CatalogService.Controllers
 
         }
 
-        //update per il prodotto 
-        [HttpPut("products/{id}")] //PUT /api/products/{id} only available quantity 
+        [HttpPut("products/{id}")] //PUT /api/products/{id}
         public async Task<ActionResult<ProductDto>> UpdateProductAsync(Guid id, [FromBody] ProductDto dto)
         {
             if (!ModelState.IsValid)
@@ -92,8 +88,6 @@ namespace CatalogService.Controllers
 
         }
 
-
-        ////i need a api for Update stock
         [HttpPut("products/{id}/stock")] //PUT /api/catalog/update-stock/{id}
         public async Task<IActionResult> UpdateStock(Guid id, [FromBody] UpdateStockDto dto)
         {
@@ -105,22 +99,6 @@ namespace CatalogService.Controllers
             {
                 return BadRequest(new { message = "Quantity must be greater than 0" });
             }
-
-            //try
-            //{
-            //    var result = await _productService.ReduceStockAsync(id, dto.Quantity);
-
-            //    if (!result)
-            //    {
-            //        return BadRequest(new { message = "Not enough stock available" });
-            //    }
-            //    return Ok(new { message = "Stock updated successfully" });
-            //}
-
-            //catch (KeyNotFoundException)
-            //{
-            //    return NotFound(new { message = "Product not found" });
-            //}
 
             var result = await _productService.ReduceStockAsync(id, dto.Quantity);
             if (!result)

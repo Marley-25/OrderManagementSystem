@@ -22,14 +22,14 @@ namespace OrderService.Services.Impl
         private readonly HttpClient _catalogClient;
         private readonly HttpClient _notificationClient;
 
-        public OrderServiceImpl(IOrderRepository orderRepository, IHttpClientFactory httpClientFactory) //ctor with Interface http?
+        public OrderServiceImpl(IOrderRepository orderRepository, IHttpClientFactory httpClientFactory) 
         {
             _orderRepository = orderRepository;
-            _catalogClient = httpClientFactory.CreateClient("CatalogClient");   //dependency injection to request at catalog 
+            _catalogClient = httpClientFactory.CreateClient("CatalogClient");   
             _notificationClient = httpClientFactory.CreateClient("NotificationService");
         }
 
-        public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()  ///orderDto or orderproduct from ICollection 
+        public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()  
 
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
@@ -37,9 +37,8 @@ namespace OrderService.Services.Impl
             return orders.Select(o => new OrderResponseDto
 
             {
-                Id = o.Id,   //remember o not p for Guid 
+                Id = o.Id,  
                 ProductId = o.ProductId,
-                //ProductName = p.ProductName,
                 TotalPrice = o.TotalPrice,
                 Quantity = o.Quantity,
                 CreatedAt = o.CreatedAt
@@ -64,7 +63,7 @@ namespace OrderService.Services.Impl
             };
         }
 
-        public async Task<IEnumerable<OrderResponseDto>> CreateOrderAsync(IEnumerable<OrderProductDto> dtos)  //i need to improve request and response dto 
+        public async Task<IEnumerable<OrderResponseDto>> CreateOrderAsync(IEnumerable<OrderProductDto> dtos) 
         {
             if (dtos == null)
             {
@@ -73,13 +72,12 @@ namespace OrderService.Services.Impl
             var results = new List<OrderResponseDto>();
             foreach (var dto in dtos)
             {
-                ///////validation quantity new part 
+           
                 if (dto.Quantity <= 0)
                 {
                     throw new ArgumentException("Order cannot have 0 products");
                 }
 
-                //call to GET api/products for price 
                 var productResponse = await _catalogClient.GetAsync($"/api/products/{dto.ProductId}");
                 if (!productResponse.IsSuccessStatusCode)
                 {
@@ -92,7 +90,8 @@ namespace OrderService.Services.Impl
                     throw new InvalidOperationException("Without success");
                 }
 
-                //call PUT api/product/id/stock
+                
+
                 var stockUpdate = new { quantity = dto.Quantity };
                 var stockResponse = await _catalogClient.PutAsJsonAsync($"/api/products/{dto.ProductId}/stock", stockUpdate);
 
@@ -130,12 +129,3 @@ namespace OrderService.Services.Impl
         }
     }
 }
-                        //return new OrderResponseDto
-                        //{
-                        //    Id = newOrder.Id,
-                        //    ProductId = newOrder.ProductId,
-                        //    Quantity = newOrder.Quantity,
-                        //    TotalPrice = newOrder.TotalPrice,
-                        //    CreatedAt = newOrder.CreatedAt
-                        //};
-     

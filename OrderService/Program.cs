@@ -17,14 +17,13 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
 builder.WebHost.UseUrls("http://localhost:7202");
 
-// i need communication HTTP with appsetting.json
+
 builder.Services.AddHttpClient("CatalogClient", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceUrl:CatalogService"]
         ?? "http://localhost:5171");
 });
 
-// i need communication HTTP with NotificationService 
 builder.Services.AddHttpClient("NotificationService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceUrl:NotificationService"]
