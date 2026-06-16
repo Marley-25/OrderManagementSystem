@@ -17,7 +17,7 @@ Theproject is split into 3 independent microservices:
 
 ## Technologies Used
 
-- Framework: .NET 8/ ASP.NET Core Web API
+- Framework: .NET 10/ ASP.NET Core Web API
 - Database: Entity Framework Core ( In-Memory Database Provider)
 - HTTP Client: IHTTPClientFactory for inter-service communication 
 _ Testing Tool: Bruno API Explorer 
