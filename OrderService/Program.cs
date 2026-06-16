@@ -18,7 +18,7 @@ builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
 builder.WebHost.UseUrls("http://localhost:7202");
 
 // i need communication HTTP with appsetting.json
-builder.Services.AddHttpClient("CatalogService", client =>
+builder.Services.AddHttpClient("CatalogClient", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceUrl:CatalogService"]
         ?? "http://localhost:5171");
