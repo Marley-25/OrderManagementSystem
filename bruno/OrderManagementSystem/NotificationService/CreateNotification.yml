@@ -5,14 +5,14 @@ info:
 
 http:
   method: POST
-  url: http://localhost:5090/api/notifications
+  url: http://localhost:5060/api/notifications
   body:
     type: json
     data: |-
       {
         "id": " ",
         "productId": " ",
-        "orderId": " ",
+        "orderId": "",
         "createdAt": " ",
         "message": "Order sent successfully!"
       }

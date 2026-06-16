@@ -26,7 +26,7 @@ namespace OrderService.Services.Impl
         {
             _orderRepository = orderRepository;
             _catalogClient = httpClientFactory.CreateClient("CatalogClient");   //dependency injection to request at catalog 
-           _notificationClient = httpClientFactory.CreateClient("NotificationService");
+            _notificationClient = httpClientFactory.CreateClient("NotificationService");
         }
 
         public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()  ///orderDto or orderproduct from ICollection 
@@ -34,7 +34,7 @@ namespace OrderService.Services.Impl
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
 
-            return orders.Select(o => new OrderResponseDto 
+            return orders.Select(o => new OrderResponseDto
 
             {
                 Id = o.Id,   //remember o not p for Guid 
@@ -54,7 +54,7 @@ namespace OrderService.Services.Impl
                 return null;
             }
             return new OrderResponseDto
-            
+
             {
                 Id = order.Id,
                 ProductId = order.ProductId,
@@ -64,68 +64,78 @@ namespace OrderService.Services.Impl
             };
         }
 
-        public async Task<OrderResponseDto> CreateOrderAsync(OrderProductDto dto)  //i need to improve request and response dto 
+        public async Task<IEnumerable<OrderResponseDto>> CreateOrderAsync(IEnumerable<OrderProductDto> dtos)  //i need to improve request and response dto 
         {
-
-            ///////validation quantity new part 
-            if (dto.Quantity <= 0)
+            if (dtos == null)
             {
-               throw new ArgumentException("Quantity must be >0");
+                throw new ArgumentException("Order cannot have 0 products");
             }
-            //call to GET api/products for price 
-            var productResponse = await _catalogClient.GetAsync($"/api/products/{dto.ProductId}");
-            if  (!productResponse.IsSuccessStatusCode)
+            var results = new List<OrderResponseDto>();
+            foreach (var dto in dtos)
             {
-                throw new KeyNotFoundException("Product not found");
+                ///////validation quantity new part 
+                if (dto.Quantity <= 0)
+                {
+                    throw new ArgumentException("Order cannot have 0 products");
+                }
+
+                //call to GET api/products for price 
+                var productResponse = await _catalogClient.GetAsync($"/api/products/{dto.ProductId}");
+                if (!productResponse.IsSuccessStatusCode)
+                {
+                    throw new KeyNotFoundException("Product not found");
+                }
+
+                var product = await productResponse.Content.ReadFromJsonAsync<CatalogProductDto>();
+                if (product == null)
+                {
+                    throw new InvalidOperationException("Without success");
+                }
+
+                //call PUT api/product/id/stock
+                var stockUpdate = new { quantity = dto.Quantity };
+                var stockResponse = await _catalogClient.PutAsJsonAsync($"/api/products/{dto.ProductId}/stock", stockUpdate);
+
+                if (!stockResponse.IsSuccessStatusCode)
+                {
+                    throw new InvalidOperationException("Insufficient stock");
+                }
+
+                var TotalPrice = product.Price * dto.Quantity;
+
+                var newOrder = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    ProductId = dto.ProductId,
+                    Quantity = dto.Quantity,
+                    TotalPrice = TotalPrice,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                await _orderRepository.CreateOrderAsync(newOrder);
+                await _orderRepository.SaveChangesAsync();
+
+                var notificationOrder = new
+                {
+                    orderId = newOrder.Id,
+                    productId = newOrder.ProductId,
+                    message = $"Order processed for {product.Name}",
+                    createdAt = DateTime.UtcNow
+                };
+
+                _ = _notificationClient.PostAsJsonAsync("/api/notifications", notificationOrder);
             }
-               
-            var product = await productResponse.Content.ReadFromJsonAsync<CatalogProductDto>();
-            if (product == null)
-            {
-                throw new InvalidOperationException("Without success");
-            }
-
-            //call PUT api/product/id/stock
-            var stockUpdate = new { quantity = dto.Quantity };
-            var stockResponse = await _catalogClient.PutAsJsonAsync($"/api/products/{dto.ProductId}/stock", stockUpdate);
-
-            if (!stockResponse.IsSuccessStatusCode)
-            {
-                throw new InvalidOperationException("Insufficient stock");
-            }
-
-            var TotalPrice = product.Price * dto.Quantity;
-            
-            var newOrder = new Order
-            {
-                Id = Guid.NewGuid(),
-                ProductId = dto.ProductId,
-                Quantity = dto.Quantity,
-                TotalPrice = TotalPrice,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _orderRepository.CreateOrderAsync(newOrder);
             await _orderRepository.SaveChangesAsync();
-
-            var notificationOrder = new
-            {
-                orderId = newOrder.Id,
-                productId = newOrder.ProductId,
-                message = $"Order processed for {product.Name}",
-                createdAt = DateTime.UtcNow
-            };
-
-            _ = _notificationClient.PostAsJsonAsync("/api/notifications", notificationOrder);
-  
-            return new OrderResponseDto
-            {
-                Id = newOrder.Id,
-                ProductId = newOrder.ProductId,
-                Quantity = newOrder.Quantity,
-                TotalPrice = newOrder.TotalPrice,
-                CreatedAt = newOrder.CreatedAt
-            };
+            return results;
         }
     }
 }
+                        //return new OrderResponseDto
+                        //{
+                        //    Id = newOrder.Id,
+                        //    ProductId = newOrder.ProductId,
+                        //    Quantity = newOrder.Quantity,
+                        //    TotalPrice = newOrder.TotalPrice,
+                        //    CreatedAt = newOrder.CreatedAt
+                        //};
+     

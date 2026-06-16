@@ -5,21 +5,20 @@ info:
 
 http:
   method: POST
-  url: http://localhost:5059/api/order/orders
+  url: http://localhost:7202/api/order/orders
   body:
     type: json
-    data: |-
-      { dtos:[
+    data: |
+      [
         {
-        "productId": "3d039a20-efd2-442c-a893-d97d6343fd42",
+        "productId": "4ff21f3e-ceca-4aac-aae5-aafcaf3118de",
         "quantity": 12
       },
         {
-        "productId": "a2c4d059-8016-45c7-8409-baf93a7e8af4",
+        "productId": "0161d319-1a14-42c1-b9e3-b02c4d1228a4",
         "quantity": 4
       }
       ]
-      }
   auth: inherit
 
 settings:

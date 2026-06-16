@@ -52,12 +52,8 @@ namespace OrderService.Controllers
             }//attriubuti di validazione con ModelValid 
             try
             {
-                var createdOrders = new List<OrderResponseDto>();
-                foreach (var dto in dtos)
-                {
-                    var createdOrder = await _orderService.CreateOrderAsync(dto);
-                    createdOrders.Add(createdOrder);
-                }
+               
+                var createdOrders = await _orderService.CreateOrderAsync(dtos); //no foreach 
                 return Ok(createdOrders);
             }
 

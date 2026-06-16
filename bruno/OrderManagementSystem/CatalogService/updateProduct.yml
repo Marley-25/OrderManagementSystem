@@ -8,7 +8,7 @@ http:
   url: http://localhost:5171/api/catalog/products/:id
   params:
     - name: id
-      value: f330d8af-125e-47ff-95b1-68aeda3e32a1
+      value: db3851bb-d758-4824-a746-0d25c42022bd
       type: path
   body:
     type: json

@@ -15,7 +15,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderServiceImpl>();
-builder.WebHost.UseUrls("http://localhost:5059");
+builder.WebHost.UseUrls("http://localhost:7202");
 
 // i need communication HTTP with appsetting.json
 builder.Services.AddHttpClient("CatalogService", client =>
@@ -28,7 +28,7 @@ builder.Services.AddHttpClient("CatalogService", client =>
 builder.Services.AddHttpClient("NotificationService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceUrl:NotificationService"]
-        ?? "http://localhost:5090");
+        ?? "http://localhost:5060");
 });
 
 builder.Services.AddControllers();
