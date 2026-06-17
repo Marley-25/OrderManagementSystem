@@ -8,7 +8,7 @@ http:
   url: http://localhost:7202/api/order/orders/:id
   params:
     - name: id
-      value: 7f52fc89-9ad2-4f0c-a26a-a354703c5e1c
+      value: 62207dd0-fec5-4fab-bada-91c286956624
       type: path
   auth: inherit
 

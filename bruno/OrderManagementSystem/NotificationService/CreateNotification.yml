@@ -8,7 +8,12 @@ http:
   url: http://localhost:7026/api/notifications
   body:
     type: json
-    data: ""
+    data: |
+      {
+        "productId": "27fc1101-9c14-47bd-8b13-93a6b20e34d5",
+        "orderId": "633c1d43-9c19-4cda-b6f6-2dae1caefc4c",
+        "message": "Test notification"
+      }
   auth: inherit
 
 settings:
