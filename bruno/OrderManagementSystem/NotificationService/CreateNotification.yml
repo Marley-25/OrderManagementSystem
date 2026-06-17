@@ -5,17 +5,10 @@ info:
 
 http:
   method: POST
-  url: http://localhost:5060/api/notifications
+  url: http://localhost:7026/api/notifications
   body:
     type: json
-    data: |-
-      {
-        "id": " ",
-        "productId": " ",
-        "orderId": "",
-        "createdAt": " ",
-        "message": "Order sent successfully!"
-      }
+    data: ""
   auth: inherit
 
 settings:

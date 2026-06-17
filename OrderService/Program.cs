@@ -27,7 +27,7 @@ builder.Services.AddHttpClient("CatalogClient", client =>
 builder.Services.AddHttpClient("NotificationService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceUrl:NotificationService"]
-        ?? "http://localhost:5060");
+        ?? "http://localhost:7026");
 });
 
 builder.Services.AddControllers();

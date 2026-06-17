@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: http://localhost:5059/api/orders/:id
+  url: http://localhost:7202/api/order/orders/:id
   params:
     - name: id
-      value: ""
+      value: 7f52fc89-9ad2-4f0c-a26a-a354703c5e1c
       type: path
   auth: inherit
 

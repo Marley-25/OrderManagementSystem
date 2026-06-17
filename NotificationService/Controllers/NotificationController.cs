@@ -24,8 +24,9 @@ namespace NotificationService.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _notificationService.CreateNotificationAsync(dto);
-            return Ok(new { message = "Notification sent successfully" });
+            //await _notificationService.CreateNotificationAsync(dto);
+            Console.WriteLine($"Notification {dto.OrderId} processed {dto.Message}");
+            return Ok();
         }
     }
 }

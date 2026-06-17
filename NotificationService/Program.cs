@@ -12,7 +12,7 @@ builder.Services.AddDbContext<NotificationDb>(options => options.UseInMemoryData
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationServiceImpl>();
 
-builder.WebHost.UseUrls("http://localhost:5060");
+builder.WebHost.UseUrls("http://localhost:7026");
 builder.Services.AddControllers();
  builder.Services.AddEndpointsApiExplorer();
 

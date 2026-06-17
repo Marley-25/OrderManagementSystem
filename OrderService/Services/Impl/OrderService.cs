@@ -69,16 +69,17 @@ namespace OrderService.Services.Impl
             {
                 throw new ArgumentException("Order cannot have 0 products");
             }
+            
             var results = new List<OrderResponseDto>();
             foreach (var dto in dtos)
             {
-           
+
                 if (dto.Quantity <= 0)
                 {
                     throw new ArgumentException("Order cannot have 0 products");
                 }
 
-                var productResponse = await _catalogClient.GetAsync($"/api/products/{dto.ProductId}");
+                var productResponse = await _catalogClient.GetAsync($"/api/catalog/products/{dto.ProductId}");
                 if (!productResponse.IsSuccessStatusCode)
                 {
                     throw new KeyNotFoundException("Product not found");
@@ -90,10 +91,8 @@ namespace OrderService.Services.Impl
                     throw new InvalidOperationException("Without success");
                 }
 
-                
-
                 var stockUpdate = new { quantity = dto.Quantity };
-                var stockResponse = await _catalogClient.PutAsJsonAsync($"/api/products/{dto.ProductId}/stock", stockUpdate);
+                var stockResponse = await _catalogClient.PutAsJsonAsync($"/api/catalog/products/{dto.ProductId}/stock", stockUpdate);
 
                 if (!stockResponse.IsSuccessStatusCode)
                 {
@@ -116,14 +115,25 @@ namespace OrderService.Services.Impl
 
                 var notificationOrder = new
                 {
-                    orderId = newOrder.Id,
-                    productId = newOrder.ProductId,
-                    message = $"Order processed for {product.Name}",
-                    createdAt = DateTime.UtcNow
+                    Id = Guid.NewGuid(),
+                    OrderId = newOrder.Id,
+                    ProductId = newOrder.ProductId,
+                    Message = $"Order processed for {product.Name}",
+                    CreatedAt = DateTime.UtcNow
                 };
 
-                _ = _notificationClient.PostAsJsonAsync("/api/notifications", notificationOrder);
+                _ = _notificationClient.PostAsJsonAsync("/api/notifications", new{ dto = notificationOrder});
+
+                results.Add(new OrderResponseDto
+                {
+                    Id = newOrder.Id,
+                    ProductId = newOrder.ProductId,
+                    Quantity = newOrder.Quantity,
+                    TotalPrice = TotalPrice,
+                    CreatedAt = newOrder.CreatedAt
+                });
             }
+
             await _orderRepository.SaveChangesAsync();
             return results;
         }
