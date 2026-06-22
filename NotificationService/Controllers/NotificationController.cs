@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Dtos;
-using NotificationService.Services.Impl;
-using NotificationService.Services;
+////using NotificationService.Services.Impl;
+////using NotificationService.Services;
 
 namespace NotificationService.Controllers
 {
@@ -10,13 +10,6 @@ namespace NotificationService.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationService _notificationService;
-
-        public NotificationController(INotificationService notificationService)
-        {
-            _notificationService = notificationService;
-        }
-
         [HttpPost] 
         public async Task<ActionResult> CreateNotificationAsync([FromBody] NotificationDto dto)
         {
@@ -24,9 +17,12 @@ namespace NotificationService.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //await _notificationService.CreateNotificationAsync(dto);
             Console.WriteLine($"Notification {dto.OrderId} processed {dto.Message}");
-            return Ok();
+            return Ok(new
+            {
+                Status = "Notification processed successfully.",
+                Message = dto.Message
+            });
         }
     }
 }

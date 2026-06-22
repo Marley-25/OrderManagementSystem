@@ -11,5 +11,4 @@ namespace NotificationService.Dtos
         public string Message { get; set; } = string.Empty;
     }
 
-
 }

@@ -8,7 +8,7 @@ http:
   url: http://localhost:5171/api/catalog/products/:id
   params:
     - name: id
-      value: c436cd69-1aa6-4ce1-a9ee-8847063dea21
+      value: 9c2a1e94-430a-4a6c-b39e-3d0607c995f6
       type: path
   auth: inherit
 

@@ -79,7 +79,6 @@ namespace CatalogService.Controllers
         {
             bool isDeleted = await _productService.DeleteProductAsync(id);
 
-            ///var deleted = await _productService.DeleteProductAsync(Id);
             if (!isDeleted)
             {
                 return NotFound(new { message = $"Product not found" });

@@ -11,11 +11,11 @@ http:
     data: |
       [
         {
-        "productId": "27fc1101-9c14-47bd-8b13-93a6b20e34d5",
+        "productId": "32864c12-165f-49f8-beb7-497a2f0618e5",
         "quantity": 6
       },
         {
-        "productId": "27fc1101-9c14-47bd-8b13-93a6b20e34d5",
+        "productId": "32864c12-165f-49f8-beb7-497a2f0618e5",
         "quantity": 4
       }
       ]
