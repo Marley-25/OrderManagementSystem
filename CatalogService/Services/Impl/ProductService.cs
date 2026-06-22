@@ -82,7 +82,7 @@ namespace CatalogService.Services.Impl
 
             if (product.AvailableQuantity < quantity)
             {
-                return false;
+                throw new InvalidOperationException($"Isufficient stock {product.AvailableQuantity}");
             }
 
             product.AvailableQuantity -= quantity;

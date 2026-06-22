@@ -10,6 +10,7 @@ using CatalogService.Services;
 using CatalogService.Dtos;
 using Microsoft.Extensions.Validation;
 using CatalogService.Services.Impl;
+using System.Linq.Expressions;
 
 
 namespace CatalogService.Controllers
@@ -90,23 +91,41 @@ namespace CatalogService.Controllers
         [HttpPut("products/{id}/stock")] //PUT /api/catalog/update-stock/{id}
         public async Task<IActionResult> UpdateStock(Guid id, [FromBody] UpdateStockDto dto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            if (dto.Quantity <= 0)
-            {
-                return BadRequest(new { message = "Quantity must be greater than 0" });
-            }
+                var success = await _productService.ReduceStockAsync(id, dto.Quantity);
 
-            var result = await _productService.ReduceStockAsync(id, dto.Quantity);
-            if (!result)
-            {
-                return BadRequest(new { message = "Not enough stock available" });
+                if (!success)
+                {
+                    return BadRequest("Insuffient stock ");
+                }
+                return Ok();
             }
-            return Ok(new { message = "Stock updated successfully" });
-       
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            //if (dto.Quantity <= 0)
+            //{
+            //    return BadRequest(new { message = "Quantity must be greater than 0" });
+            //}
+
+            //var result = await _productService.ReduceStockAsync(id, dto.Quantity);
+            //if (!result)
+            //{
+            //    return BadRequest(new { message = "Not enough stock available" });
+            //}
+            //return Ok(new { message = "Stock updated successfully" });
+       
     }
 }
 

@@ -21,4 +21,7 @@ namespace OrderService.Repositories;
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    }
+
+        public List<OrderItemDto> OrderItems { get; set; } = new(); 
+    
+}

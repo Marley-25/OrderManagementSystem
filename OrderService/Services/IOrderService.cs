@@ -9,6 +9,6 @@ namespace OrderService.Services
     {
         Task<IEnumerable<OrderResponseDto>> GetOrdersAsync();
         Task<OrderResponseDto?> GetOrderByIdAsync(Guid id);
-        Task<IEnumerable<OrderResponseDto>> CreateOrderAsync(IEnumerable<OrderProductDto> dtos);
+        Task<IEnumerable<OrderResponseDto>> CreateOrderAsync(OrderProductDto dtos);
     }
 }

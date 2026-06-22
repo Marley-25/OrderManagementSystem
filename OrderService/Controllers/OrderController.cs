@@ -43,7 +43,7 @@ namespace OrderService.Controllers
 
         //POST /api/orders:
         [HttpPost("orders")]
-        public async Task<ActionResult<OrderResponseDto>> CreateOrderAsync([FromBody] IEnumerable<OrderProductDto> dtos)
+        public async Task<ActionResult<OrderResponseDto>> CreateOrderAsync([FromBody] OrderProductDto dtos)
 
         {
             if (!ModelState.IsValid)
