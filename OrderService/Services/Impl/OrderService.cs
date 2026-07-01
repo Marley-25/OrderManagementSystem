@@ -31,19 +31,38 @@ namespace OrderService.Services.Impl
             _notificationClient = httpClientFactory.CreateClient("NotificationService");
         }
 
-        public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()
+        //public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()
 
+        //{
+        //    var orders = await _orderRepository.GetAllOrdersAsync();
+
+        //    return orders.Select(o => new OrderResponseDto
+
+        //    {
+        //        Id = o.Id,
+        //        ProductId = o.ProductId,
+        //        TotalPrice = o.TotalPrice,
+        //        Quantity = o.Quantity,
+        //        CreatedAt = o.CreatedAt
+        //    }).ToList();
+        //}
+
+        public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
-
             return orders.Select(o => new OrderResponseDto
-
             {
                 Id = o.Id,
-                ProductId = o.ProductId,
                 TotalPrice = o.TotalPrice,
-                Quantity = o.Quantity,
-                CreatedAt = o.CreatedAt
+                CreatedAt = o.CreatedAt,
+
+                Items = o.OrderItems != null
+                ? o.OrderItems.Select(item => new OrderItemDetailsDto
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                }).ToList()
+                : new List<OrderItemDetailsDto>()
             }).ToList();
         }
 
@@ -82,7 +101,7 @@ namespace OrderService.Services.Impl
 
             var results = new List<OrderResponseDto>();
 
-            foreach (var item in dto.OrderItems)
+            foreach (var item in dto.OrderItems) 
             {
                 if (item.Quantity <= 0)
                     throw new ArgumentException("Quantity must be greater than 0");
@@ -126,14 +145,19 @@ namespace OrderService.Services.Impl
                 Message = $"Order processed {newOrder.Id}",
                 CreatedAt = DateTime.UtcNow
             });
-
+           
             return new List<OrderResponseDto>
             {
                 new OrderResponseDto
                 {
                     Id = newOrder.Id,
                     TotalPrice = newOrder.TotalPrice,
-                    CreatedAt = newOrder.CreatedAt
+                    CreatedAt = newOrder.CreatedAt,
+                    Items = dto.OrderItems.Select(item => new OrderItemDetailsDto
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity 
+                    }).ToList()
                 }
             };
         }

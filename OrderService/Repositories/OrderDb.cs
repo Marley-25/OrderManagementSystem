@@ -13,8 +13,15 @@ namespace OrderService.Repositories;
         public OrderDb(DbContextOptions<OrderDb> options) : base(options) { }
         public DbSet<Order> Orders { get; set; }
     }
+    
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    base.OnModelCreating(modelBuilder);
+    //    modelBuilder.Entity<OrderItemDto>().HasNoKey;
+    //}
 
-    public class Order
+
+public class Order
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid ProductId { get; set; }
@@ -22,6 +29,6 @@ namespace OrderService.Repositories;
         public decimal TotalPrice { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public List<OrderItemDto> OrderItems { get; set; } = new(); 
-    
-}
+        public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+
+    }

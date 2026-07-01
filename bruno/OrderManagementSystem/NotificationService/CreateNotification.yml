@@ -8,11 +8,15 @@ http:
   url: http://localhost:7026/api/notifications
   body:
     type: json
-    data: |
+    data: |-
       {
-        "productId": "32864c12-165f-49f8-beb7-497a2f0618e5",
-        "orderId": "d6448e25-a95a-47c3-81a9-c663f903b2dc",
-        "message": "Notification sent"
+        "OrderId": "92cc36db-401b-4d7c-8bb7-9400c0bc864d",
+        "Message": "Notification sent ",
+        "ProductIds":[
+        "f36ac9a1-8660-4b82-875b-1aeac2f15934"
+        "f36ac9a1-8660-4b82-875b-1aeac2f15934"
+        "f36ac9a1-8660-4b82-875b-1aeac2f15934"
+          ]
       }
   auth: inherit
 

@@ -9,11 +9,13 @@ namespace OrderService.Dtos
 {
      public class OrderProductDto
     {
-        List<OrderItemDto> OrderItems { get; set; } = new();
-    }
+        //public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+    } 
     public class OrderItemDto
     {
-        public required Guid ProductId { get; set; }
+        [Key] public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
 
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Quantity > 0")]
@@ -27,7 +29,13 @@ namespace OrderService.Dtos
             public int Quantity { get; set; }
             public decimal TotalPrice { get; set; }
             public DateTime CreatedAt { get; set; }
+            public List<OrderItemDetailsDto> Items { get; set; } = new List<OrderItemDetailsDto>();
         }
+    public class OrderItemDetailsDto
+    {
+        public Guid ProductId { get; set; }
+        public int Quantity { get; set; }
+    }
 
 }
 

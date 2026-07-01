@@ -8,17 +8,25 @@ http:
   url: http://localhost:7202/api/order/orders
   body:
     type: json
-    data: |
-      [
-        {
-        "productId": "32864c12-165f-49f8-beb7-497a2f0618e5",
-        "quantity": 6
-      },
-        {
-        "productId": "32864c12-165f-49f8-beb7-497a2f0618e5",
-        "quantity": 4
+    data: |-
+      {
+        "OrderItems": [
+          {
+            "ProductId": "f2f38abd-5cc0-43d8-bb99-26065b3bbdb0",
+            "Quantity": 5
+          },
+            {
+            "ProductId": "f2f38abd-5cc0-43d8-bb99-26065b3bbdb0",
+            "Quantity": 4
+          },
+          
+          {
+            "ProductId": "bf17bd0b-536e-430b-bcfa-e068276c9da3",
+            "Quantity": 1
+          }
+            
+        ]
       }
-      ]
   auth: inherit
 
 settings:

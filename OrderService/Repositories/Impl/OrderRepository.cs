@@ -21,17 +21,13 @@ namespace OrderService.Repositories.Impl
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
-            return await _context.Orders
-              
-                .ToListAsync();
+            return await _context.Orders.ToListAsync();
         }
 
 
         public async Task<Order?> GetOrderByIdAsync(Guid id)
         {
-            return await _context.Orders
-               
-                .FindAsync(id);
+            return await _context.Orders.FindAsync(id);
 
         }
         public async Task CreateOrderAsync(Order order)
