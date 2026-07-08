@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Dtos;
-////using NotificationService.Services.Impl;
-////using NotificationService.Services;
 
 namespace NotificationService.Controllers
 {
@@ -24,5 +22,6 @@ namespace NotificationService.Controllers
                 Message = dto.Message
             });
         }
+
     }
 }

@@ -31,21 +31,6 @@ namespace OrderService.Services.Impl
             _notificationClient = httpClientFactory.CreateClient("NotificationService");
         }
 
-        //public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()
-
-        //{
-        //    var orders = await _orderRepository.GetAllOrdersAsync();
-
-        //    return orders.Select(o => new OrderResponseDto
-
-        //    {
-        //        Id = o.Id,
-        //        ProductId = o.ProductId,
-        //        TotalPrice = o.TotalPrice,
-        //        Quantity = o.Quantity,
-        //        CreatedAt = o.CreatedAt
-        //    }).ToList();
-        //}
 
         public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()
         {
@@ -77,7 +62,6 @@ namespace OrderService.Services.Impl
 
             {
                 Id = order.Id,
-                ProductId = order.ProductId,
                 Quantity = order.Quantity,
                 TotalPrice = order.TotalPrice,
                 CreatedAt = order.CreatedAt
@@ -125,10 +109,10 @@ namespace OrderService.Services.Impl
 
                 var orderItem = new OrderItemDto
                 {
-                    //Id = Guid.NewGuid(),
+                    
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    //TotalPrice = product.Price
+                   
                 };
 
                 newOrder.OrderItems.Add(orderItem);
@@ -138,7 +122,7 @@ namespace OrderService.Services.Impl
             await _orderRepository.CreateOrderAsync(newOrder);
             await _orderRepository.SaveChangesAsync();
 
-            await _notificationClient.PostAsJsonAsync("/api/notifications", new
+            await _notificationClient.PostAsJsonAsync($"/api/notifications", new
             {
                 Id = Guid.NewGuid(),
                 OrderId = newOrder.Id,

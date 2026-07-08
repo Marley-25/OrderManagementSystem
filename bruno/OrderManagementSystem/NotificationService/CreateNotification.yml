@@ -10,12 +10,14 @@ http:
     type: json
     data: |-
       {
-        "OrderId": "92cc36db-401b-4d7c-8bb7-9400c0bc864d",
+        "OrderId": "221de480-389a-47a0-bf6f-6cf265e6f687",
         "Message": "Notification sent ",
-        "ProductIds":[
-        "f36ac9a1-8660-4b82-875b-1aeac2f15934"
-        "f36ac9a1-8660-4b82-875b-1aeac2f15934"
-        "f36ac9a1-8660-4b82-875b-1aeac2f15934"
+        "Products":[
+          
+        {"ProductId": "1c8643aa-9d9e-4f77-9ffd-130cd8d046ee"},
+        {"ProductId": "1c8643aa-9d9e-4f77-9ffd-130cd8d046ee"},
+        {"ProductId": "1c8643aa-9d9e-4f77-9ffd-130cd8d046ee"}
+        
           ]
       }
   auth: inherit
