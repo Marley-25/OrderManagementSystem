@@ -26,7 +26,7 @@ In Details:
 - Catalog Service: (http://localhost:5171) : Manages the product inventory, availability and pricing. Uses In- Memory Dtabase.
 - Order Service: (http://localhost:7202): Processes order placement requests ncontaining multiple items, orchestrates inventory 
 				 checks with the CatalogService and broadcasts order confirmations. Uses an In Memory database.
-_ Notification Service: (http://localhost:5060): Receives order updates asynchronously and logs events to both an in-memroy database and the sstem console.
+- Notification Service: (http://localhost:7026): Receives order updates asynchronously and logs events to both an in-memroy database and the sstem console.
 
 The communication between the Order Service and the Notification Service implements a Fire and Forget patter, 
 ensuring that order fulfillment is never blocked by notification processing delays.
