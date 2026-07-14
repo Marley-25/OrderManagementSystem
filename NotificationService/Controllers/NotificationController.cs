@@ -2,26 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Dtos;
 
+
 namespace NotificationService.Controllers
 {
     [Route("api/notifications")]
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        [HttpPost] 
+        [HttpPost]
         public async Task<ActionResult> CreateNotificationAsync([FromBody] NotificationDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Console.WriteLine($"Notification {dto.OrderId} processed {dto.Message}");
-            return Ok(new
-            {
-                Status = "Notification processed successfully.",
-                Message = dto.Message
-            });
-        }
 
+            Console.WriteLine("Orderid " + dto.OrderId + " Message:" + dto.Message);
+            return Ok();
+        }
     }
 }
+        

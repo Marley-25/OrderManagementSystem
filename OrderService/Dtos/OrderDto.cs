@@ -24,7 +24,6 @@ namespace OrderService.Dtos
         public class OrderResponseDto
         {
             public Guid Id { get; set; }
-            public int Quantity { get; set; }
             public decimal TotalPrice { get; set; }
             public DateTime CreatedAt { get; set; }
             public List<OrderItemDetailsDto> Items { get; set; } = new List<OrderItemDetailsDto>();

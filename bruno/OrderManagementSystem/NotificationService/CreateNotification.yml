@@ -10,15 +10,9 @@ http:
     type: json
     data: |-
       {
-        "OrderId": "221de480-389a-47a0-bf6f-6cf265e6f687",
-        "Message": "Notification sent ",
-        "Products":[
-          
-        {"ProductId": "1c8643aa-9d9e-4f77-9ffd-130cd8d046ee"},
-        {"ProductId": "1c8643aa-9d9e-4f77-9ffd-130cd8d046ee"},
-        {"ProductId": "1c8643aa-9d9e-4f77-9ffd-130cd8d046ee"}
-        
-          ]
+        "OrderId": "bb12546c-e509-46fd-aa57-a8c4d677eaa7",
+        "Message": "Notification sent "
+       
       }
   auth: inherit
 

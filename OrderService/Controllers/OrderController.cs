@@ -29,7 +29,7 @@ namespace OrderService.Controllers
             return Ok(orders);
         }
 
-        [HttpGet("orders/{id}")] //GET /api/orders/{id}:
+        [HttpGet("orders/{id}")]
         public async Task<ActionResult<OrderResponseDto>> GetOrderByIdAsync(Guid id)
         {
             var order = await _orderService.GetOrderByIdAsync(id);
@@ -41,7 +41,7 @@ namespace OrderService.Controllers
         }
 
 
-        //POST /api/orders:
+      
         [HttpPost("orders")]
         public async Task<ActionResult<OrderResponseDto>> CreateOrderAsync([FromBody] OrderProductDto dtos)
 

@@ -26,14 +26,14 @@ namespace CatalogService.Controllers
             _productService = productService;
         }
 
-        [HttpGet("products")] ///GET /api/products
+        [HttpGet("products")]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
         {
-            var products = await _productService.GetProductsAsync(); //
+            var products = await _productService.GetProductsAsync(); 
             return Ok(products);
         }
 
-        [HttpGet("products/{id}")] //GET /api/products/{id}
+        [HttpGet("products/{id}")]
         public async Task<ActionResult<ProductDto?>> GetById(Guid id)
         {
             var product = await _productService.GetProductByIdAsync(id);
@@ -45,18 +45,18 @@ namespace CatalogService.Controllers
             return Ok(product);
         }
 
-        [HttpPost("products")] //POST /api/products
+        [HttpPost("products")]
         public async Task<ActionResult<ProductDto>> Create([FromBody] ProductDto dto)
 
         {
-            if (!ModelState.IsValid) //attriubuti di validazione con ModelValid 
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var createdProduct = await _productService.CreateProductAsync(dto);
             return createdProduct;
 
         }
 
-        [HttpPut("products/{id}")] //PUT /api/products/{id}
+        [HttpPut("products/{id}")]
         public async Task<ActionResult<ProductDto>> UpdateProductAsync(Guid id, [FromBody] ProductDto dto)
         {
             if (!ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace CatalogService.Controllers
         }
 
 
-        [HttpDelete("products/{id}")] //DELETE /api/products/{id}
+        [HttpDelete("products/{id}")]
         public async Task<ActionResult<bool>> DeleteProductAsync(Guid id)
 
         {
@@ -88,7 +88,7 @@ namespace CatalogService.Controllers
 
         }
 
-        [HttpPut("products/{id}/stock")] //PUT /api/catalog/update-stock/{id}
+        [HttpPut("products/{id}/stock")]
         public async Task<IActionResult> UpdateStock(Guid id, [FromBody] UpdateStockDto dto)
         {
             try
@@ -110,22 +110,6 @@ namespace CatalogService.Controllers
                 return NotFound(ex.Message);
             }
         }
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            //if (dto.Quantity <= 0)
-            //{
-            //    return BadRequest(new { message = "Quantity must be greater than 0" });
-            //}
-
-            //var result = await _productService.ReduceStockAsync(id, dto.Quantity);
-            //if (!result)
-            //{
-            //    return BadRequest(new { message = "Not enough stock available" });
-            //}
-            //return Ok(new { message = "Stock updated successfully" });
-       
     }
 }
 

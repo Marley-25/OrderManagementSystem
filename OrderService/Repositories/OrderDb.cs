@@ -13,12 +13,6 @@ namespace OrderService.Repositories;
         public OrderDb(DbContextOptions<OrderDb> options) : base(options) { }
         public DbSet<Order> Orders { get; set; }
     }
-    
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-    //    base.OnModelCreating(modelBuilder);
-    //    modelBuilder.Entity<OrderItemDto>().HasNoKey;
-    //}
 
 
 public class Order

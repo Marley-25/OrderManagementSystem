@@ -2,12 +2,15 @@
 using CatalogService.Dtos;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Http;
+using NotificationService.Dtos;
+using NotificationService.Controllers;
 using OrderService.Dtos;
 using OrderService.Repositories;
 using OrderService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Http;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -35,20 +38,22 @@ namespace OrderService.Services.Impl
         public async Task<IEnumerable<OrderResponseDto>> GetOrdersAsync()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
-            return orders.Select(o => new OrderResponseDto
-            {
-                Id = o.Id,
-                TotalPrice = o.TotalPrice,
-                CreatedAt = o.CreatedAt,
+            return orders
+                .OrderByDescending(o => o.CreatedAt)
+                .Select(o => new OrderResponseDto
+                {
+                    Id = o.Id,
+                    TotalPrice = o.TotalPrice,
+                    CreatedAt = o.CreatedAt,
 
-                Items = o.OrderItems != null
+                    Items = o.OrderItems != null
                 ? o.OrderItems.Select(item => new OrderItemDetailsDto
                 {
                     ProductId = item.ProductId,
                     Quantity = item.Quantity
                 }).ToList()
                 : new List<OrderItemDetailsDto>()
-            }).ToList();
+                }).ToList();
         }
 
         public async Task<OrderResponseDto?> GetOrderByIdAsync(Guid id)
@@ -62,9 +67,14 @@ namespace OrderService.Services.Impl
 
             {
                 Id = order.Id,
-                Quantity = order.Quantity,
                 TotalPrice = order.TotalPrice,
-                CreatedAt = order.CreatedAt
+                CreatedAt = order.CreatedAt,
+                Items = order.OrderItems != null
+                ? order.OrderItems.Select(item => new OrderItemDetailsDto
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                }).ToList() : new List<OrderItemDetailsDto>()
             };
         }
 
@@ -80,12 +90,12 @@ namespace OrderService.Services.Impl
             {
                 Id = Guid.NewGuid(),
                 TotalPrice = 0,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                OrderItems = new List<OrderItemDto>()
             };
 
-            var results = new List<OrderResponseDto>();
 
-            foreach (var item in dto.OrderItems) 
+            foreach (var item in dto.OrderItems)
             {
                 if (item.Quantity <= 0)
                     throw new ArgumentException("Quantity must be greater than 0");
@@ -103,16 +113,38 @@ namespace OrderService.Services.Impl
                     new { quantity = item.Quantity });
 
                 if (!stockResponse.IsSuccessStatusCode)
-                    throw new InvalidOperationException("Stock update failed");
+                {
+                    int availableStock = 0;
+                    try
+                    {
+                        var errorData = await stockResponse.Content.ReadFromJsonAsync<Dictionary<string, System.Text.Json.JsonElement>>();
+                        if (errorData != null && errorData.TryGetValue("availableStock", out var element))
+                        {
+
+                            if (element.ValueKind == System.Text.Json.JsonValueKind.Number)
+                            {
+                                availableStock = element.GetInt32();
+                            }
+                            else if (element.ValueKind == System.Text.Json.JsonValueKind.String && int.TryParse(element.GetString(), out var parsedQty))
+                            {
+                                availableStock = parsedQty;
+                            }
+                        }
+                    }
+                    catch { }
+
+                    throw new InvalidOperationException($"Stock insufficient for product {item.ProductId}, only {availableStock}");
+                }
+
 
                 var itemTotal = product.Price * item.Quantity;
 
                 var orderItem = new OrderItemDto
                 {
-                    
+
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                   
+
                 };
 
                 newOrder.OrderItems.Add(orderItem);
@@ -122,14 +154,15 @@ namespace OrderService.Services.Impl
             await _orderRepository.CreateOrderAsync(newOrder);
             await _orderRepository.SaveChangesAsync();
 
-            await _notificationClient.PostAsJsonAsync($"/api/notifications", new
-            {
-                Id = Guid.NewGuid(),
-                OrderId = newOrder.Id,
-                Message = $"Order processed {newOrder.Id}",
-                CreatedAt = DateTime.UtcNow
-            });
-           
+            await _notificationClient.PostAsJsonAsync($"/api/notifications",
+                new NotificationDto
+                {
+                    OrderId = newOrder.Id,
+                    Message = $"Order created. Total price: {newOrder.TotalPrice} and created at: {newOrder.CreatedAt}"
+
+                });
+
+
             return new List<OrderResponseDto>
             {
                 new OrderResponseDto
@@ -137,12 +170,14 @@ namespace OrderService.Services.Impl
                     Id = newOrder.Id,
                     TotalPrice = newOrder.TotalPrice,
                     CreatedAt = newOrder.CreatedAt,
-                    Items = dto.OrderItems.Select(item => new OrderItemDetailsDto
+                    Items = newOrder.OrderItems.Select(item => new OrderItemDetailsDto
                     {
                         ProductId = item.ProductId,
-                        Quantity = item.Quantity 
+                        Quantity = item.Quantity
                     }).ToList()
                 }
+
+
             };
         }
     }
