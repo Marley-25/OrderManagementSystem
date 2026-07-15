@@ -12,17 +12,17 @@ http:
       {
         "orderItems": [
           {
-            "productId": "ab173e1c-e4d6-498b-925e-052edb0203dd",
+            "productId": "ad52326b-fee4-4573-bd99-39f358beadaf",
             "quantity": 10
           },
             {
-            "productId": "ab173e1c-e4d6-498b-925e-052edb0203dd",
+            "productId": "ad52326b-fee4-4573-bd99-39f358beadaf",
 
             "quantity": 2
           },
           
           {
-            "productId": "ab173e1c-e4d6-498b-925e-052edb0203dd",
+            "productId": "ad52326b-fee4-4573-bd99-39f358beadaf",
             
             "quantity": 1
           }

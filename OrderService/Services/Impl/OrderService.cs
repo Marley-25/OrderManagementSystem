@@ -139,7 +139,7 @@ namespace OrderService.Services.Impl
                     var content = await stockResponse.Content.ReadAsStringAsync();
 
                     throw new InvalidOperationException(
-                        $"API returned non-JSON content: {content}",
+                        $"{content} units available for {item.ProductId}",
                         ex);
                 }
                 }
