@@ -114,9 +114,10 @@ namespace OrderService.Services.Impl
 
                 if (!stockResponse.IsSuccessStatusCode)
                 {
-                    int availableStock = 0;
+
                     try
                     {
+                        int availableStock = 0;
                         var errorData = await stockResponse.Content.ReadFromJsonAsync<Dictionary<string, System.Text.Json.JsonElement>>();
                         if (errorData != null && errorData.TryGetValue("availableStock", out var element))
                         {
@@ -128,14 +129,21 @@ namespace OrderService.Services.Impl
                             else if (element.ValueKind == System.Text.Json.JsonValueKind.String && int.TryParse(element.GetString(), out var parsedQty))
                             {
                                 availableStock = parsedQty;
+
                             }
+                            throw new InvalidOperationException($"Stock insufficient for product {item.ProductId}, only {availableStock}");
                         }
                     }
-                    catch { }
+                    catch (JsonException ex)
+                {
+                    var content = await stockResponse.Content.ReadAsStringAsync();
 
-                    throw new InvalidOperationException($"Stock insufficient for product {item.ProductId}, only {availableStock}");
+                    throw new InvalidOperationException(
+                        $"API returned non-JSON content: {content}",
+                        ex);
                 }
-
+                }
+               
 
                 var itemTotal = product.Price * item.Quantity;
 
